@@ -5,9 +5,6 @@
 // Инициализация BME680 с использованием I2C
 Adafruit_BME680 bme;
 
-// Пин встроенного светодиода
-const int ledPin = 13;
-
 // Структура для хранения данных с датчика
 struct BME680SensorData {
   float temperature;
@@ -19,6 +16,25 @@ struct BME680SensorData {
 };
 
 bool BME680Ready = false;
+
+void setup() {
+  // Инициализация Serial
+  Serial.begin(115200);
+
+  // Попытка инициализировать BME680
+  initializeBME680();
+}
+
+void loop() {
+  // Считываем данные с датчика
+  BME680SensorData bme680SensorData = readBME680SensorData();
+
+  // Выводим данные в Serial
+  printBME680SensorData(bme680SensorData);
+
+  // Задержка между измерениями
+  delay(2000);
+}
 
 // Функция для инициализации датчика
 bool initializeBME680() {
@@ -84,23 +100,4 @@ void printBME680SensorData(const BME680SensorData& data) {
   Serial.println(" секунд с момента запуска.");
 
   Serial.println();
-}
-
-void setup() {
-  // Инициализация Serial
-  Serial.begin(115200);
-
-  // Попытка инициализировать BME680
-  initializeBME680();
-}
-
-void loop() {
-  // Считываем данные с датчика
-  BME680SensorData bme680SensorData = readBME680SensorData();
-
-  // Выводим данные в Serial
-  printBME680SensorData(bme680SensorData);
-
-  // Задержка между измерениями
-  delay(2000);
 }
